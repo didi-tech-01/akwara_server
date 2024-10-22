@@ -98,6 +98,32 @@ app.delete("/remove_image/:id", async (req, res) => {
   }
 });
 
+
+// Update isOutstock field
+app.patch("/update_isoutstock/:id", async (req, res) => {
+  try {
+    const { isOutstock } = req.body;
+    if (typeof isOutstock !== "boolean") {
+      return res.status(400).json({ status: false, message: "Invalid value for isOutstock" });
+    }
+
+    const updatedImage = await Images.findByIdAndUpdate(
+      req.params.id,
+      { isOutstock: isOutstock },
+      { new: true } // Returns the updated document
+    );
+
+    if (!updatedImage) {
+      return res.status(404).json({ status: false, message: "Image not found" });
+    }
+
+    res.status(200).json({ status: true, message: "Image updated", data: updatedImage });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error?.message });
+  }
+});
+
+
 //ini my database
 mongoose
   .connect(process.env.MONGODB_URI, {
