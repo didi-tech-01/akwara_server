@@ -5,6 +5,7 @@ const imageSchema = mongoose.Schema(
   {
     name: { type: String },
     price: { type: Number },
+    isOutstock: { type: Boolean, default: false }, 
     img_url: {
       type: String,
     },
